@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split, cross_val_score
 
 # read the file
 raw_data = list(np.genfromtxt("data/optdigits.tra", delimiter=',', dtype=None))
+raw_data.extend(list(np.genfromtxt("data/optdigits.tes", delimiter=',', dtype=None)))
 image = []
 digit_data = []
 digit_label = []
@@ -39,7 +40,7 @@ model_name.append('NB')
 print("Accuracy on digit recongnition with K-fold cross validation.")
 for i in range(len(model)):
     scores = cross_val_score(model[i], digit_data, digit_label, cv=10)
-    print("using %s: %0.2f" % (model_name[i], scores.mean()))
+    print("using %s: %0.4f" % (model_name[i], scores.mean()))
 print("")
 
 
@@ -55,6 +56,6 @@ print("")
 counter = np.zeros(10,dtype=np.int)
 for i in range(len(digit_label)):
     digit = digit_label[i]
-    im = Image.fromarray(image[i]*10)
+    im = Image.fromarray(image[i]*15).resize((128,128), Image.ANTIALIAS)
     im.convert("RGB").save("image/{}-{}.jpg".format(digit,counter[digit]))
     counter[digit] = counter[digit] + 1
