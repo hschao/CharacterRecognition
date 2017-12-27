@@ -5,7 +5,7 @@ from sklearn import tree,neighbors,naive_bayes
 from sklearn.model_selection import train_test_split, cross_val_score
 
 # read the file
-raw_data = list(np.genfromtxt("data/semeion.data", delimiter=' ', dtype=None))
+raw_data = list(np.genfromtxt("data/optdigits.tra", delimiter=',', dtype=None))
 image = []
 digit_data = []
 digit_label = []
@@ -14,14 +14,14 @@ digit_label = []
 for row in raw_data:
     row = list(row)
     # store label
-    digit_label.append(row[256:267].index(1))
+    digit_label.append(row[-1])
 
     # transfrom image to feature
-    img = np.asarray(row[0:256]).reshape([16,16])*255
+    img = np.asarray(row[0:64]).reshape([8,8]).astype('uint8')
     image.append(img)
 
     # store the feature
-    features = feature.hog(img, orientations=9, pixels_per_cell=(4, 4), cells_per_block=(3, 3), visualise=False, block_norm='L2-Hys')
+    features = feature.hog(img, orientations=9, pixels_per_cell=(2, 2), cells_per_block=(3, 3), visualise=False, block_norm='L2-Hys')
     digit_data.append(features)
 
 
@@ -54,6 +54,6 @@ print("")
 counter = np.zeros(10,dtype=np.int)
 for i in range(len(digit_label)):
     digit = digit_label[i]
-    im = Image.fromarray(image[i])
+    im = Image.fromarray(image[i]*10)
     im.convert("RGB").save("image/{}-{}.jpg".format(digit,counter[digit]))
     counter[digit] = counter[digit] + 1
