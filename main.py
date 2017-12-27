@@ -21,7 +21,8 @@ for row in raw_data:
     image.append(img)
 
     # store the feature
-    features = feature.hog(img, orientations=9, pixels_per_cell=(2, 2), cells_per_block=(3, 3), visualise=False, block_norm='L2-Hys')
+    # features = feature.hog(img, orientations=9, pixels_per_cell=(2, 2), cells_per_block=(3, 3), visualise=False, block_norm='L2-Hys')
+    features = img.reshape(64)
     digit_data.append(features)
 
 
